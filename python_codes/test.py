@@ -26,6 +26,7 @@ import pandas as pd     # For data manipulation and dataframes
 import numpy as np      # For numerical operations
 from datetime import datetime  # For timestamping the test
 import sys              # For system operations
+from features import compute_all_features, ensure_features_exist  # Shared feature engineering
 
 
 # ============================================================================
@@ -59,11 +60,11 @@ def load_active_data(csv_path):
     """
     FUNCTION: load_active_data(csv_path)
     
-    PURPOSE: Load the active deals CSV file that was generated from model.py
+    PURPOSE: Load the active deals CSV file that was generated from models.py
     
     PARAMETERS:
         csv_path (str): Path to the CSV file containing active deals
-                       Default: 'active_deals_predictions.csv' (from model.py)
+                       Default: 'active_deals_predictions.csv' (from models.py)
     
     RETURNS: 
         pandas.DataFrame: The loaded data or None if error
@@ -130,59 +131,6 @@ def validate_data(df, required_columns):
     return True  # Validation passed
 
 
-def ensure_features_exist(df, num_feats, cat_feats):
-    """
-    FUNCTION: ensure_features_exist(df, num_feats, cat_feats)
-    
-    PURPOSE: Ensure all required features exist in the dataframe
-             If missing, create them with default values
-    
-    PARAMETERS:
-        df (pandas.DataFrame): The dataframe to process
-        num_feats (list): List of numerical feature names
-        cat_feats (list): List of categorical feature names
-    
-    RETURNS:
-        pandas.DataFrame: The dataframe with all features present
-    
-    PROCESS:
-        1. Make a copy of the dataframe (don't modify original)
-        2. Combine numerical and categorical feature lists
-        3. For each feature:
-           - If it doesn't exist in dataframe, create it
-           - For numerical features: fill with 0
-           - For categorical features: fill with 'missing'
-        4. Return the updated dataframe
-    
-    WHY THIS IS NEEDED:
-        The model expects certain features. Active deals data might not have
-        all of them (like statistics calculated during training). This function
-        creates placeholders so the model doesn't crash.
-    
-    EXAMPLE:
-        df = pd.DataFrame({'sales_agent': ['John'], 'product': ['XYZ']})
-        df = ensure_features_exist(df, ['deal_age', 'agent_win_rate'], ['sector'])
-        # Now df has columns: sales_agent, product, deal_age (0), agent_win_rate (0), sector ('missing')
-    """
-    df = df.copy()  # Create a copy to avoid modifying the original dataframe
-    
-    # Combine both lists of features
-    all_features = num_feats + cat_feats
-    
-    # Loop through each feature
-    for f in all_features:
-        if f not in df.columns:  # If the feature doesn't exist
-            # Check if it's a numerical feature or categorical
-            if f in num_feats:
-                # Numerical features get default value of 0
-                df[f] = 0
-            else:
-                # Categorical features get default value of 'missing'
-                df[f] = 'missing'
-    
-    return df  # Return the updated dataframe
-
-
 # ============================================================================
 # MAIN TEST FUNCTION
 # ============================================================================
@@ -209,9 +157,9 @@ def test_model_predictions(df_active, model_path='sales_pipeline_model.pkl'):
     # SECTION 1: LOAD MODEL ARTIFACTS
     # ========================================================================
     """
-    This section loads the pickled model file saved from model.py
+    This section loads the pickled model file saved from models.py
     
-    What gets saved in the pickle file (from model.py):
+    What gets saved in the pickle file (from models.py):
     {
         'model': XGBClassifier (the trained model),
         'preprocessor': ColumnTransformer (handles data preprocessing),
@@ -241,7 +189,7 @@ def test_model_predictions(df_active, model_path='sales_pipeline_model.pkl'):
     except FileNotFoundError:
         # Error if the model file doesn't exist
         print(f"✗ Model file not found: {model_path}")
-        print(f"   Make sure you ran model.py first to generate: {model_path}")
+        print(f"   Make sure you ran models.py first to generate: {model_path}")
         return False  # Stop testing
     
     except Exception as e:
@@ -284,9 +232,13 @@ def test_model_predictions(df_active, model_path='sales_pipeline_model.pkl'):
     print_header("3. DATA PREPROCESSING")
     
     try:
-        # Step 1: Ensure all features exist (add missing ones with default values)
+        # Step 1: Run the SAME feature engineering the API uses (temporal,
+        # statistical and interaction features) instead of zero-filling them
+        df_processed = compute_all_features(df_active, artifacts)
+
+        # Step 2: Ensure all features exist (add missing ones with default values)
         df_processed = ensure_features_exist(
-            df_active,
+            df_processed,
             artifacts['numerical_features'],    # List of 42 numerical features
             artifacts['categorical_features']   # List of 8 categorical features
         )
@@ -602,8 +554,8 @@ def main():
     print_header("SALES PIPELINE - MODEL TESTING")
     
     # Configuration: set paths to the files we need
-    ACTIVE_DATA_PATH = 'active_deals_predictions.csv'  # Generated from model.py
-    MODEL_PATH = 'sales_pipeline_model.pkl'            # Generated from model.py
+    ACTIVE_DATA_PATH = 'active_deals_predictions.csv'  # Generated from models.py
+    MODEL_PATH = 'sales_pipeline_model.pkl'            # Generated from models.py
     
     # Print what files we're looking for
     print(f"\nLooking for active deals file: {ACTIVE_DATA_PATH}")
@@ -615,7 +567,7 @@ def main():
         if df_active is None:
             # If loading failed, exit
             print("\n✗ Could not load active deals data")
-            print("   Make sure model.py has been run and generated: active_deals_predictions.csv")
+            print("   Make sure models.py has been run and generated: active_deals_predictions.csv")
             return False
     except Exception as e:
         print(f"✗ Error: {str(e)}")

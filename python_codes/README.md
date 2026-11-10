@@ -141,7 +141,7 @@ The **Sales Pipeline Prediction API** is an enterprise-grade machine learning so
 ```
 Active Deals Data (CSV)
         ↓
-    model.py (Training)
+    models.py (Training)
         ├─→ Data Loading & EDA
         ├─→ Feature Engineering (50 features)
         ├─→ Train/Test Split (80/20)
@@ -262,7 +262,7 @@ sales-pipeline-api/
 ├── LICENSE                            # MIT License
 ├── .gitignore                         # Git ignore file
 │
-├── model.py                           # Model training script
+├── models.py                           # Model training script
 │   ├── Data loading (SQL database)
 │   ├── Feature engineering
 │   ├── Model training (XGBoost)
@@ -275,6 +275,8 @@ sales-pipeline-api/
 │   ├── Generate predictions
 │   ├── Calculate statistics
 │   └── Export results
+│
+├── features.py                        # Shared feature engineering (used by main.py & test.py)
 │
 ├── main.py                            # Production API (FastAPI)
 │   ├── API endpoints
@@ -742,37 +744,30 @@ uvicorn main:app --reload
 
 **Dockerfile**
 ```dockerfile
-FROM python:3.11-slim
+FROM python:3.13.9-slim
 
 WORKDIR /app
 
-#Copy the pipfile install dependencies
+#Install the pinned dependencies (requirements.txt is the single source of truth)
 
-COPY Pipfile Pipfile.lock ./
+COPY requirements.txt .
 
-#FIX: Install pipenv globally in the container first, as it's not included in the slim image.
-
-RUN pip install pipenv
-
-#Now install project dependencies using pipenv
-
-RUN pipenv install --system --deploy
+RUN pip install --no-cache-dir -r requirements.txt
 
 #Copy model artifacts and application code
-#NOTE: You must run model_trainer.py locally to generate sales_pipeline_model.pkl
+#NOTE: You must run models.py locally to generate sales_pipeline_model.pkl
 
 COPY sales_pipeline_model.pkl ./
 
-#CRITICAL: Copy your application code
+#CRITICAL: Copy your application code (features.py holds the shared feature engineering)
 
-COPY main.py ./
+COPY main.py features.py ./
 
 #Expose the port that FastAPI will run on
 
 EXPOSE 9696
 
 #Command to run the application using Uvicorn
-#Start uvicorn
 
 CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9696"]
 ```
@@ -900,14 +895,14 @@ logging.basicConfig(
 ### Issue: "Model file not found"
 **Solution:**
 ```bash
-# Make sure model.py has been run first
-python model.py
+# Make sure models.py has been run first
+python models.py
 
 # Check if file exists
 ls -la sales_pipeline_model.pkl
 
 # If missing, retrain model
-python model.py
+python models.py
 ```
 
 ### Issue: "Specifying columns using strings is only supported for dataframes"
