@@ -1,0 +1,153 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "207f567a00d4a3339906",
+  "position": {
+    "x": 480.32956744273139,
+    "y": 471.70089257849071,
+    "z": 10000,
+    "height": 248.79345858560637,
+    "width": 388.29036889083079,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to Use",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "center"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Start with the Pipeline Overview",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " for overall context.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Navigate to the Revenue Deep Dive",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " to explore growth drivers and compare performance across categories.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Use the Agent Performance view",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " to drill into team-level insights",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Apply filters for time, stage, or agent to uncover deeper trends or anomalies",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

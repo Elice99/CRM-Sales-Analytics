@@ -1,0 +1,32 @@
+relationship 043c3790-bc83-42b6-9610-af1eb4615119
+	joinOnDateBehavior: datePartOnly
+	fromColumn: sales_pipeline.engage_date
+	toColumn: LocalDateTable_d2c55e36-81e0-4623-acea-37595de8d07b.Date
+
+relationship AutoDetected_50543be6-d8bd-4367-990f-9217eb518d30
+	fromColumn: sales_pipeline.sales_agent
+	toColumn: sales_teams.sales_agent
+
+relationship 528dd8d2-7a6f-64a9-721a-517898bfe80f
+	fromColumn: sales_pipeline.account
+	toColumn: accounts.account
+
+relationship 20b225e4-6b9b-47d7-f44a-f791147245a1
+	fromColumn: sales_pipeline.product
+	toColumn: products.product
+
+relationship 5c807b4d-8866-441f-90ea-c0de69a67e62
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateTable.Date
+	toColumn: LocalDateTable_e617a57d-d79a-4a43-9214-e05531730626.Date
+
+relationship 3d6d6be7-32e9-1dee-36b2-7d570945d3f2
+	fromColumn: sales_pipeline.close_date
+	toColumn: DateTable.Date
+
+relationship AutoDetected_57c0cee2-45ba-441b-ac5f-721e12a39ef3
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Flag url'.account
+	toColumn: accounts.account
+

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "f49596cd0f44f716f6a9",
+  "position": {
+    "x": 67.421032342623647,
+    "y": 255,
+    "z": 8000,
+    "height": 459.47958829651907,
+    "width": 1202.6820604408817,
+    "tabOrder": 8000
+  },
+  "visualGroup": {
+    "displayName": "Agent Performance",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

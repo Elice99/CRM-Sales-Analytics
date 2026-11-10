@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "05e3c9f3336c24862187",
+  "position": {
+    "x": 880.12483615254973,
+    "y": 471.70089257849071,
+    "z": 8000,
+    "height": 248.79345858560637,
+    "width": 388.29036889083079,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Data Sources",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "CRM Pipeline Dataset",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " — includes deal stage, agent, revenue, deal value, and close date information.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Data is ",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": "refreshed monthly",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " to ensure trend accuracy and up-to-date insights.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Data Sources",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "CRM Pipeline Dataset",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " — includes deal stage, agent, revenue, deal value, and close date information.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Data is ",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": "refreshed monthly",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " to ensure trend accuracy and up-to-date insights.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

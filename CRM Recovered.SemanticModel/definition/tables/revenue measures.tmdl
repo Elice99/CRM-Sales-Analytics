@@ -1,0 +1,164 @@
+table 'revenue measures'
+	lineageTag: f06774a3-8bc0-45da-855f-c69f009cab88
+
+	measure total_revenue_closed = SUM('sales_pipeline'[close_value])
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: daccc597-e967-4e59-9626-30c80b8f4b84
+
+	measure 'vs Last Month %' = ```
+			
+			VAR CM = [total_revenue_closed]
+			VAR PM_sales = 
+			CALCULATE(
+			    [total_revenue_closed],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_sales, PM_sales)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, UNICHAR(11165) & " " & FORMAT(perc, "0.0%"),
+			    perc < 0, UNICHAR(11167) & " " & FORMAT(perc*-1, "0.0%"),
+			    FORMAT(perc, "0.0%")
+			)
+			RETURN
+			_format
+			```
+		lineageTag: d689e815-72a0-4991-b66a-4bb92e5ebc8b
+
+	measure 'profile_ total_revenue' = SUM(accounts[revenue])
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: c456ee31-a6cc-46b9-b24c-43b6f37fce21
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	measure base = 0
+		formatString: 0
+		lineageTag: f26a0d41-aa12-4680-9c9e-56104ee3ba1e
+
+	measure 'CF Last Month' = ```
+			
+			VAR CM = [total_revenue_closed]
+			VAR PM_sales = 
+			CALCULATE(
+			    [total_revenue_closed],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_sales, PM_sales)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "Green",
+			    perc < 0, "Red",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 3666980a-358c-4189-83d8-3796523dc464
+
+	measure 'TABLE_CF Last Month' = ```
+			
+			VAR CM = [total_revenue_closed]
+			VAR PM_sales = 
+			CALCULATE(
+			    [total_revenue_closed],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_sales, PM_sales)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "#00FF0030",
+			    perc < 0, "FF000030",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 6fd1a797-fe51-4c66-9cad-681cf10b2a17
+
+	measure Avg_revenue_ = ```
+			CALCULATE(
+			    AVERAGEX(
+			        FILTER('sales_pipeline',
+			                'sales_pipeline'[deal_stage] = "Won"
+			                && 'sales_pipeline'[close_value] <> 0
+			        ),
+			        'sales_pipeline'[close_date]
+			    )
+			) 
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d0d1633f-7902-4f78-bfe6-1c984dd49255
+
+	measure Total_rev_CM = ```
+			
+			VAR CM = CALCULATE(
+			    MAX(DateTable[month_num]), 
+			    ALL(DateTable)
+			    )
+			VAR rev_CM = CALCULATE(
+			    [total_revenue_closed], 
+			    FILTER(
+			        ALL(DateTable),
+			         DateTable[month_num]= CM
+			        )
+			    )
+			RETURN
+			    rev_CM
+			```
+		formatString: 0
+		lineageTag: fa1a6dec-020f-4d55-b740-c85c8666801c
+
+	measure Total_rev_PM = ```
+			
+			VAR PM =
+			    CALCULATE(
+			        MAX(DateTable[month_num]), 
+			        ALL(DateTable)
+			    )- 1
+			VAR rev_PM = 
+			    CALCULATE(
+			        [total_revenue_closed], 
+			        FILTER(
+			            ALL(DateTable),
+			            'DateTable'[month_num] = PM
+			        )
+			    )
+			RETURN
+			    rev_PM
+			```
+		formatString: 0
+		lineageTag: e6bb3c1b-56b5-4411-a5a0-64f97dfe69bf
+
+	measure Max_rev =
+			
+			VAR max_val = MAXX(ALL('DateTable'),[total_revenue_closed])
+			VAR check = IF(max_val = [total_revenue_closed], max_val, BLANK())
+			RETURN
+			check
+		formatString: 0
+		lineageTag: 49da12f6-88fa-4bf1-92f4-6c423238d51e
+
+	measure Min_rev =
+			
+			VAR min_val = MINX(ALL('DateTable'),[total_revenue_closed])
+			VAR check = IF(min_val = [total_revenue_closed], min_val, BLANK())
+			RETURN
+			check
+		formatString: 0
+		lineageTag: d1375db6-ec35-425d-a2e6-83d60243aadb
+
+	partition 'revenue measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

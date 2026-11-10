@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "11a953a80d2622031243",
+  "position": {
+    "x": 68.326707631198573,
+    "y": 260.44324504168128,
+    "z": 9000,
+    "height": 446.78734308148006,
+    "width": 908.32708019596123,
+    "tabOrder": 5000
+  },
+  "visualGroup": {
+    "displayName": "More Revenue ",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

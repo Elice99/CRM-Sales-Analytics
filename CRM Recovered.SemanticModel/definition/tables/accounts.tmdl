@@ -1,0 +1,80 @@
+table accounts
+	lineageTag: 98143520-ec59-475b-8888-6fa0fd9c4d9a
+
+	column account
+		dataType: string
+		lineageTag: fcba1023-0b62-4d42-b21d-a7f40196f1f8
+		summarizeBy: none
+		sourceColumn: account
+
+		annotation SummarizationSetBy = Automatic
+
+	column sector
+		dataType: string
+		lineageTag: 14630931-f30e-40db-a0f8-c38578836c8a
+		summarizeBy: none
+		sourceColumn: sector
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_established
+		dataType: int64
+		formatString: 0
+		lineageTag: a06e412d-f8c2-4882-90f7-75fd532d06c5
+		summarizeBy: none
+		sourceColumn: year_established
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: decimal
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 97be9ac0-3f2d-46be-9a30-89fb1bf55ae2
+		summarizeBy: none
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column employees
+		dataType: int64
+		formatString: 0
+		lineageTag: d4944b5f-2cf6-457b-88a7-1554342a6806
+		summarizeBy: none
+		sourceColumn: employees
+
+		annotation SummarizationSetBy = Automatic
+
+	column office_location
+		dataType: string
+		lineageTag: 723c3eb6-21f7-4c0f-8c2d-8c298331b221
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: office_location
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_tier
+		dataType: string
+		lineageTag: c57a4c81-ef38-472d-a8b1-bc5ab7198076
+		summarizeBy: none
+		sourceColumn: account_tier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition accounts = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ELICE99\SQLEXPRESS"),
+				    CRM_Sales_Opportunity = Source{[Name="CRM_Sales_Opportunity"]}[Data],
+				    dbo_accounts = CRM_Sales_Opportunity{[Schema="dbo",Item="accounts"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(dbo_accounts,{{"year_established", Int64.Type}, {"revenue", Currency.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

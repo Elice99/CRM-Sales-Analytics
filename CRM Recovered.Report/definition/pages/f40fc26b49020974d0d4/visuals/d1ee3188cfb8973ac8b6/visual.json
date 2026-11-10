@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "d1ee3188cfb8973ac8b6",
+  "position": {
+    "x": 60.963844092341112,
+    "y": 73.18068550472519,
+    "z": 11000,
+    "height": 641.29390192298649,
+    "width": 1219,
+    "tabOrder": 7000
+  },
+  "visualGroup": {
+    "displayName": "Pipeline Table",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

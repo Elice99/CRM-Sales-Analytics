@@ -1,0 +1,53 @@
+table 'Flag url'
+	lineageTag: 741ec757-0792-4fa6-8884-6402fd34be3e
+
+	column account
+		dataType: string
+		lineageTag: edd19fff-6637-4629-b861-9695858da1fa
+		summarizeBy: none
+		sourceColumn: account
+
+		annotation SummarizationSetBy = Automatic
+
+	column Abbr
+		dataType: string
+		lineageTag: a3f75d70-5212-4fca-aca9-81f7e158dccd
+		summarizeBy: none
+		sourceColumn: Abbr
+
+		annotation SummarizationSetBy = Automatic
+
+	column office_location
+		dataType: string
+		lineageTag: 6f13f71b-794d-470c-8034-5db197411408
+		summarizeBy: none
+		sourceColumn: office_location
+
+		annotation SummarizationSetBy = Automatic
+
+	column Flags
+		dataType: string
+		lineageTag: 2b4016e1-3b38-4edd-a67a-e74d901bac03
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Flags
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Flag url' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Hp\Desktop\GitHub\Projects\Elisha Bassey\datasets\Flag url.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"account", type text}, {"office_location", type text}, {"Flags", type text}}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Changed Type1", "Abbr", each if [office_location] = "United States" then "USA" else if [office_location] = "Japan" then "JPN" else if [office_location] = "China" then "CHN" else if [office_location] = "Poland" then "POL" else if [office_location] = "Romania" then "ROU" else if [office_location] = "Belgium" then "BEL" else if [office_location] = "Panama" then "PAN" else if [office_location] = "Germany" then "GER" else if [office_location] = "Kenya" then "KEN" else if [office_location] = "Italy" then "ITA" else if [office_location] = "Norway" then "NOR" else if [office_location] = "Korea" then "KOR" else if [office_location] = "Jordan" then "JOR" else if [office_location] = "Brazil" then "BRA" else if [office_location] = "Philipines" then "PHI" else null),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Conditional Column",{"account", "Abbr", "office_location", "Flags"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "cb909f229e117bf90c5e",
+  "position": {
+    "x": 61.625840425031733,
+    "y": 73.18068550472519,
+    "z": 10000,
+    "height": 641.29390192298649,
+    "width": 1220.0574643659738,
+    "tabOrder": 6000
+  },
+  "visualGroup": {
+    "displayName": "Agent Table",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

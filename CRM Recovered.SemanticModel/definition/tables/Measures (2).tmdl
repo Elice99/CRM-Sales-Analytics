@@ -1,0 +1,198 @@
+table 'Measures (2)'
+	lineageTag: 13322f26-ab8f-410f-a408-3813e35b733f
+
+	measure conversion_rates = DIVIDE([deal_won],[opp_count])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e8bb98b9-5655-4bf8-8418-526602aa3ded
+
+	measure opp_count = CALCULATE(COUNTROWS(sales_pipeline), sales_pipeline[deal_stage] <> "Prospecting")
+		formatString: #,0
+		lineageTag: cc73b8f7-e261-482e-a7bb-f1806044d4f7
+
+	measure success_rate = DIVIDE([deal_won],[deal_won] + [deal_lost])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 370a9232-76a9-471c-9b98-198a3a494109
+
+	measure prospecting_count = CALCULATE(COUNT(sales_pipeline[opportunity_id]),sales_pipeline[deal_stage] = "Prospecting")
+		formatString: 0
+		lineageTag: 99f72483-8031-4821-b4a1-86030fc1fbd7
+
+	measure WelcomeMsg =
+			
+			VAR CurrentHour = HOUR(NOW())
+			VAR Greetings =
+			    SWITCH(
+			        TRUE(),
+			        CurrentHour < 12, "Good Morning",
+			        CurrentHour < 17, "Good Afternoon",
+			        "Good Evening"
+			    )
+			VAR selectedManager = SELECTEDVALUE(sales_teams[manager], "Managers")
+			VAR Today = FORMAT(TODAY(), "dddd, mmmm dd, yyyy")
+			RETURN
+			Greetings &  " "  &  selectedManager  & ", Welcome to your Dashboard. "
+		lineageTag: 78d7cdb5-f3e5-4d3d-9ea9-b91f9a15f60e
+
+	measure 'vs Last Month opp' = ```
+			
+			VAR CM = [opp_count]
+			VAR PM_opp = 
+			CALCULATE(
+			    [opp_count],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_opp, PM_opp)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, UNICHAR(11165) & " " & FORMAT(perc, "0.0%"),
+			    perc < 0, UNICHAR(11167) & " " & FORMAT(perc*-1, "0.0%"),
+			    FORMAT(perc, "0.0%")
+			)
+			RETURN
+			_format
+			```
+		lineageTag: fdb029bd-b481-4c1a-8686-4a377d830674
+
+	measure 'opp Last Month  %' = ```
+			
+			VAR CM = [opp_count]
+			VAR PM_oop = 
+			CALCULATE(
+			    [opp_count],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_oop, PM_oop)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, UNICHAR(11165) & " " & FORMAT(perc, "0.0%"),
+			    perc < 0, UNICHAR(11167) & " " & FORMAT(perc*-1, "0.0%"),
+			    FORMAT(perc, "0.0%")
+			)
+			RETURN
+			_format
+			```
+		lineageTag: f29ccfae-ab6a-41fa-9f62-61c8dc841889
+
+	measure 'CF oop Last Month' = ```
+			
+			VAR CM = [opp_count]
+			VAR PM_opp = 
+			CALCULATE(
+			    [opp_count],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_opp, PM_opp)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "Green",
+			    perc < 0, "Red",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: e8294ae5-d880-4b94-aa2c-7d93bab1eb1a
+
+	measure Avg_opp_per_month = ```
+			
+			    AVERAGEX(
+			        VALUES(DateTable[month_num]),
+			        [opp_count]
+			    )
+			 
+			```
+		lineageTag: 8dbc214d-8b2c-40eb-b08f-714b362269b0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'success Last Month  %' = ```
+			
+			VAR CM = [success_rate]
+			VAR PM = 
+			CALCULATE(
+			    [success_rate],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM, PM)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, UNICHAR(11165) & " " & FORMAT(perc, "0.0%"),
+			    perc < 0, UNICHAR(11167) & " " & FORMAT(perc*-1, "0.0%"),
+			    FORMAT(perc, "0.0%")
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 4cac38ed-28d9-4e79-bf04-0d3e8da29ba3
+
+	measure 'CF success Last Month' = ```
+			
+			VAR CM = [success_rate]
+			VAR PM = 
+			CALCULATE(
+			    [success_rate],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM, PM)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "Green",
+			    perc < 0, "Red",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 1a6cab69-ae15-48f6-aa0f-985b327d825a
+
+	measure Avg_rev_per_month = ```
+			
+			    AVERAGEX(
+			        VALUES(DateTable[month_num]),
+			        [total_revenue_closed]
+			    )
+			```
+		lineageTag: 849e4495-39c8-4a71-8fa4-c80eb929771a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TABLE_CF success Last Month' = ```
+			
+			VAR CM = [success_rate]
+			VAR PM = 
+			CALCULATE(
+			    [success_rate],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM, PM)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "#00FF0030",
+			    perc < 0, "#FF000030",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 4d72cb2a-2ebd-4055-91fd-c47fbdac0501
+
+	partition 'Measures (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

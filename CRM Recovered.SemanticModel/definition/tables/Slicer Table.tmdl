@@ -1,0 +1,33 @@
+table 'Slicer Table'
+	lineageTag: cab0ac7c-61f5-414c-a304-6a6db056b6d4
+
+	column Slicer
+		dataType: string
+		lineageTag: 9d71640a-583c-45bb-ab10-174d6f2a4038
+		summarizeBy: none
+		sourceColumn: Slicer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sort num'
+		dataType: int64
+		formatString: 0
+		lineageTag: 14968b94-fd12-4f1b-b17b-fbaaa4ba2065
+		summarizeBy: sum
+		sourceColumn: Sort num
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Slicer Table' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("LcyxCsMwDEXRf9GcpU2advWeDKFjMEYY4RqCBI78/1XVjPfwePsOq7B+YIAbxMEKGQs167t3yFk6a9LqODq+8aAzhUKsZtPfKKv8Jo8rW6XTcvZcJKNWYYOnw9axqV++IMYv", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Slicer = _t, #"Sort num" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Slicer", type text}, {"Sort num", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

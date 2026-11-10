@@ -1,0 +1,191 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "79cf427aee0c1e5d2e7a",
+  "position": {
+    "x": 0,
+    "y": 460.19599275950316,
+    "z": 11000,
+    "height": 260.29835840459396,
+    "width": 388.29036889083079,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Design Approach",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Each visual answers a ",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": "specific, intentional question",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": ".",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Color is used ",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": "strategically",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": " — green for success, red for loss, blue for neutral or active stages.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Text and visuals are ",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": "tightly integrated",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": ", with short explanations to guide interpretation.",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Layouts are ",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": "clean, consistent, and hierarchical",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#cccfd6"
+                    }
+                  },
+                  {
+                    "value": ", directing attention to what matters most",
+                    "textStyle": {
+                      "color": "#cccfd6"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

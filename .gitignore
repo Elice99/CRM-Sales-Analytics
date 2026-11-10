@@ -1,0 +1,24 @@
+# ─── Python ───
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# ─── Generated outputs (recreate by running models.py / test.py / the API) ───
+api_logs.txt
+active_deals_predictions.csv
+test_predictions_results.csv
+test_summary_statistics.txt
+
+# ─── Power BI / PBIP ───
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# ─── IDEs, Office temp files, OS junk ───
+.vs/
+.idea/
+~$*
+*.tmp
+.DS_Store
+Thumbs.db

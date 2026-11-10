@@ -1,0 +1,41 @@
+table sales_teams
+	lineageTag: 088d769b-6c84-4f06-b516-1513e72ade13
+
+	column sales_agent
+		dataType: string
+		lineageTag: 5d1a0560-3307-44dd-b9f8-53b9d8cd0054
+		summarizeBy: none
+		sourceColumn: sales_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column manager
+		dataType: string
+		lineageTag: b80b5d33-9a1a-413a-bba6-eb441244944e
+		summarizeBy: none
+		sourceColumn: manager
+
+		annotation SummarizationSetBy = Automatic
+
+	column regional_office
+		dataType: string
+		lineageTag: 7a6721c2-cfb3-4436-88b6-acd635e79e03
+		summarizeBy: none
+		sourceColumn: regional_office
+
+		annotation SummarizationSetBy = Automatic
+
+	partition sales_teams = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ELICE99\SQLEXPRESS"),
+				    CRM_Sales_Opportunity = Source{[Name="CRM_Sales_Opportunity"]}[Data],
+				    dbo_sales_teams = CRM_Sales_Opportunity{[Schema="dbo",Item="sales_teams"]}[Data]
+				in
+				    dbo_sales_teams
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

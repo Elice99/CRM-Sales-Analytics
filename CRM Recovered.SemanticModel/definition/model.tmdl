@@ -1,0 +1,32 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["accounts","products","sales_teams","sales_pipeline","Measures (2)","revenue measures","deals measures","Agent Rankings","Flag url","Slicer Table","Filters"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table accounts
+ref table products
+ref table sales_teams
+ref table sales_pipeline
+ref table DateTableTemplate_92540221-53a0-419e-8e9a-ae9ac2721848
+ref table LocalDateTable_d2c55e36-81e0-4623-acea-37595de8d07b
+ref table 'Measures (2)'
+ref table DateTable
+ref table LocalDateTable_e617a57d-d79a-4a43-9214-e05531730626
+ref table 'revenue measures'
+ref table 'deals measures'
+ref table 'Agent Rankings'
+ref table 'Flag url'
+ref table 'Slicer Table'
+ref table Filters
+
+ref cultureInfo en-US
+

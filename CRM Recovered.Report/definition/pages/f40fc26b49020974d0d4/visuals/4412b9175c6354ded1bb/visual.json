@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "4412b9175c6354ded1bb",
+  "position": {
+    "x": 876.67643369182429,
+    "y": 261.13451288127231,
+    "z": 7000,
+    "height": 25,
+    "width": 90,
+    "tabOrder": 9000
+  },
+  "visualGroup": {
+    "displayName": "Line filter",
+    "groupMode": "ScaleMode"
+  }
+}

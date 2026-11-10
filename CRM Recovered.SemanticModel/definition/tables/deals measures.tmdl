@@ -1,0 +1,131 @@
+table 'deals measures'
+	lineageTag: f0ad2e5a-de3d-47a8-998a-9e5b4fd798f5
+
+	measure Active_deal = CALCULATE(COUNT(sales_pipeline[opportunity_id]),sales_pipeline[is_active] = 1)
+		formatString: 0
+		lineageTag: 0c92e895-d6c5-47db-b162-01c03417dea4
+
+	measure avg_deal_size = DIVIDE([total_revenue_closed],[opp_count])
+		lineageTag: 3ec03187-4179-455d-9be7-39c73887a516
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure avg_deal_time = AVERAGEX(sales_pipeline,DATEDIFF(sales_pipeline[engage_date],sales_pipeline[close_date],DAY))
+		formatString: 0
+		lineageTag: db01f71e-9a92-4ed7-9570-a72b81cd51a5
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure deal_lost = CALCULATE(COUNT(sales_pipeline[opportunity_id]),sales_pipeline[deal_stage] = "Lost")
+		formatString: #,0
+		lineageTag: e93d878a-cd09-4a76-bd29-396adcbe60c4
+
+	measure deal_won = CALCULATE(COUNT(sales_pipeline[opportunity_id]),sales_pipeline[deal_stage] = "Won")
+		formatString: #,0
+		lineageTag: 848a7ad5-fc5c-4b6b-987e-3ba6fdabff8c
+
+	measure 'vs Last Month deal_won' = ```
+			
+			VAR CM = [deal_won]
+			VAR PM_deal_won = 
+			CALCULATE(
+			    [deal_won],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_deal_won, PM_deal_won)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, UNICHAR(11165) & " " & FORMAT(perc, "0.0%"),
+			    perc < 0, UNICHAR(11167) & " " & FORMAT(perc*-1, "0.0%"),
+			    FORMAT(perc, "0.0%")
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 0d98e0d1-cc25-4c56-8768-d0d94878ce06
+
+	measure Engaging_count = CALCULATE(COUNT(sales_pipeline[opportunity_id]),sales_pipeline[deal_stage] = "Engaging")
+		formatString: #,0
+		lineageTag: efa23a07-9f67-46f7-9cf9-99e0c6e88b0e
+
+	measure 'CF Last Month deal size' = ```
+			
+			VAR CM = [avg_won_deal_size]
+			VAR PM = 
+			CALCULATE(
+			    [avg_won_deal_size],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM, PM)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "Green",
+			    perc < 0, "Red",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: c25064c6-150d-4a69-a768-c13273720676
+
+	measure avg_won_deal_size = DIVIDE([total_revenue_closed],[deal_won])
+		lineageTag: dde5529b-7a5d-4f82-8434-f339b52d2bb1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'deal_size won Last Month %' = ```
+			
+			VAR CM = [avg_won_deal_size]
+			VAR PM_deal = 
+			CALCULATE(
+			    [avg_won_deal_size],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM_deal, PM_deal)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, UNICHAR(11165) & " " & FORMAT(perc, "0.0%"),
+			    perc < 0, UNICHAR(11167) & " " & FORMAT(perc*-1, "0.0%"),
+			    FORMAT(perc, "0.0%")
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 73bc6f61-acb2-469c-b74c-8d26cf472866
+
+	measure 'TABLE_CF Last Month deal size' = ```
+			
+			VAR CM = [avg_won_deal_size]
+			VAR PM = 
+			CALCULATE(
+			    [avg_won_deal_size],
+			    DATEADD(DateTable[Date], -1,MONTH)
+			    )
+			VAR perc = DIVIDE(CM - PM, PM)
+			VAR _format =
+			SWITCH(
+			    TRUE(),
+			    perc > 0, "#00FF0030",
+			    perc < 0, "#FF000030",
+			    "Grey"
+			)
+			RETURN
+			_format
+			```
+		lineageTag: 9544dacb-9bc8-455e-b160-45d15e5829b9
+
+	partition 'deals measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

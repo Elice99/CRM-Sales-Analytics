@@ -1,0 +1,112 @@
+table sales_pipeline
+	lineageTag: 5a1448ad-4049-4cf9-a778-8a4c8630a647
+
+	column opportunity_id
+		dataType: string
+		lineageTag: 9bde448e-e7ad-490d-986b-928b72f38423
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_agent
+		dataType: string
+		lineageTag: 36fcc43f-d981-4657-892f-7dddc2a4b093
+		summarizeBy: none
+		sourceColumn: sales_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column product
+		dataType: string
+		lineageTag: 991cf786-5a50-46fe-b08f-30f90c1392f7
+		summarizeBy: none
+		sourceColumn: product
+
+		annotation SummarizationSetBy = Automatic
+
+	column account
+		dataType: string
+		lineageTag: 1f525d5b-a251-4d36-955c-ac0ca2e0b817
+		summarizeBy: none
+		sourceColumn: account
+
+		annotation SummarizationSetBy = Automatic
+
+	column deal_stage
+		dataType: string
+		lineageTag: 13886b91-6e83-47fe-aaa3-dd5e46b32686
+		summarizeBy: none
+		sourceColumn: deal_stage
+
+		annotation SummarizationSetBy = Automatic
+
+	column engage_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: b70cdb26-c78d-4927-96af-d5fb3bd01d0b
+		summarizeBy: none
+		sourceColumn: engage_date
+
+		variation Variation
+			isDefault
+			relationship: 043c3790-bc83-42b6-9610-af1eb4615119
+			defaultHierarchy: LocalDateTable_d2c55e36-81e0-4623-acea-37595de8d07b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column close_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 91abad91-e0df-41bc-b5de-a6c858044fa5
+		summarizeBy: none
+		sourceColumn: close_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column close_value
+		dataType: int64
+		formatString: 0
+		lineageTag: 6610d3de-2546-4813-ab8b-8ee91616f95c
+		summarizeBy: sum
+		sourceColumn: close_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9a6dff3a-8e5f-431e-9165-c8ace511a5ea
+		summarizeBy: none
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column deal_duration
+		dataType: int64
+		formatString: 0
+		lineageTag: 704c1eb2-4bff-49fc-9b74-2698464f2081
+		summarizeBy: sum
+		sourceColumn: deal_duration
+
+		annotation SummarizationSetBy = Automatic
+
+	partition sales_pipeline = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ELICE99\SQLEXPRESS"),
+				    CRM_Sales_Opportunity = Source{[Name="CRM_Sales_Opportunity"]}[Data],
+				    dbo_sales_pipeline = CRM_Sales_Opportunity{[Schema="dbo",Item="sales_pipeline"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(dbo_sales_pipeline,{{"close_value", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

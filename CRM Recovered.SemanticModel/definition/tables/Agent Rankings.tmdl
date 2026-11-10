@@ -1,0 +1,188 @@
+table 'Agent Rankings'
+	lineageTag: 62d6cbab-9b89-432d-b698-52c8092dc42d
+
+	measure Rank_by_deal_won =
+			
+			RANKX(ALL(sales_pipeline[sales_agent]),
+			'deals measures'[deal_won], ,
+			DESC,Dense)
+		formatString: 0
+		lineageTag: a782165c-ba12-4890-814b-f8355d8ada91
+
+	measure Rank_Chng =
+			
+			VAR currentRank = [Rank_by_deal_won]
+			var previouRank = [Previous_Rank]
+			RETURN
+			IF(
+			    ISBLANK(previouRank), "-",
+			    IF(currentRank < previouRank, UNICHAR(11165)& " " & [Previous_Rank],
+			        IF(currentRank > previouRank, UNICHAR(11167)& " " & [Previous_Rank], "-" & " " & [Previous_Rank]
+			        )
+			    )
+			)
+		lineageTag: dad27243-7834-429b-abae-db49a57819b1
+
+	measure Previous_Rank = ```
+			
+			 CALCULATE(
+			    [Rank_by_deal_won],
+			    PREVIOUSMONTH(DateTable[Date])
+			 )
+			```
+		lineageTag: f854f433-8282-4870-91ff-cb758c1da63b
+
+	measure Current_Rank_won =
+			
+			RANKX(
+			    ALL(sales_pipeline[sales_agent]),
+			[deal_won],
+			    ,DESC,Dense
+			)
+		formatString: 0
+		lineageTag: 6a33f101-bad3-4fc4-9c60-842965016f36
+
+	measure CF_Agent_Ranking_ = ```
+			
+			VAR AgentRankChange = [Current_Rank_won] - [Previous_Rank]
+			VAR Color = 
+			SWITCH(
+			    TRUE,
+			    AgentRankChange = 0, "grey",
+			    AgentRankChange < 0, "green",
+			    AgentRankChange > 0, "red"
+			
+			)
+			RETURN
+			    Color
+			```
+		lineageTag: 0fe5702d-25dc-4f47-96c0-9dbe212e795f
+
+	measure Dummy_ = 4.5
+		formatString: 0
+		lineageTag: 809f62c9-9fed-45e6-8451-1291dcc93d5f
+
+	measure Current_Rank_success_rate =
+			
+			RANKX(
+			    ALL(sales_pipeline[sales_agent]),
+			[success_rate],
+			    ,DESC,Dense
+			)
+		formatString: 0
+		lineageTag: 674b380c-e935-44a6-aa14-74591d9f7f2c
+
+	measure 'Qrt Agent_by_conv_rate' = ```
+			
+			VAR MaxDate = 
+			    MAX(DateTable[Date])
+			VAR currentQrt = 
+			    CALCULATE(
+			        MAX(DateTable[Date].[Quarter]),
+			        FILTER(ALL('DateTable'), 'DateTable'[Date] = MaxDate)
+			    )
+			VAR Qrt_Agent = 
+			    CALCULATETABLE(
+			        VALUES('sales_teams'[sales_agent]),
+			        'DateTable'[Date].[Quarter] = currentQrt
+			    )
+			VAR Qrt_Ranked = 
+			    ADDCOLUMNS(
+			        Qrt_Agent,
+			        "Qrtly_conv_rate", RANKX(
+			            Qrt_Agent,
+			            [conversion_rates]
+			            , ,DESC,Dense
+			        )
+			    )
+			VAR TopQrtly_agent = 
+			    TOPN(
+			        1,
+			        FILTER(Qrt_Ranked, [Qrtly_conv_rate] = 1),
+			        'sales_teams'[sales_agent]
+			    )
+			RETURN
+			    CONCATENATEX(TopQrtly_agent, 'sales_teams'[sales_agent], ", ")
+			```
+		lineageTag: 3c1de543-04d1-4955-b2fa-00e6c4f4a526
+
+	measure 'Qrt Agent_by_succ_rate' = ```
+			
+			VAR MaxDate = 
+			    MAX(DateTable[Date])
+			VAR currentQrt = 
+			    CALCULATE(
+			        MAX(DateTable[Date].[Quarter]),
+			        FILTER(ALL('DateTable'), 'DateTable'[Date] = MaxDate)
+			    )
+			VAR Qrt_Agent = 
+			    CALCULATETABLE(
+			        VALUES('sales_teams'[sales_agent]),
+			        'DateTable'[Date].[Quarter] = currentQrt
+			    )
+			VAR Qrt_Ranked = 
+			    ADDCOLUMNS(
+			        Qrt_Agent,
+			        "Qrtly_succ_rate", RANKX(
+			            Qrt_Agent,
+			            [success_rate]
+			            , ,DESC,Dense
+			        )
+			    )
+			VAR TopQrtly_agent = 
+			    TOPN(
+			        1,
+			        FILTER(Qrt_Ranked, [Qrtly_succ_rate] = 1),
+			        'sales_teams'[sales_agent]
+			    )
+			RETURN
+			    CONCATENATEX(TopQrtly_agent, 'sales_teams'[sales_agent], ", ")
+			```
+		lineageTag: c2b26990-baff-4d93-a19e-f2c5cdcdf930
+
+	measure 'Qrt Agent_by_rev_rate' = ```
+			
+			VAR MaxDate = 
+			    MAX(DateTable[Date])
+			VAR currentQrt = 
+			    CALCULATE(
+			        MAX(DateTable[Date].[Quarter]),
+			        FILTER(ALL('DateTable'), 'DateTable'[Date] = MaxDate)
+			    )
+			VAR Qrt_Agent = 
+			    CALCULATETABLE(
+			        VALUES('sales_teams'[sales_agent]),
+			        'DateTable'[Date].[Quarter] = currentQrt
+			    )
+			VAR Qrt_Ranked = 
+			    ADDCOLUMNS(
+			        Qrt_Agent,
+			        "Qrtly_rev_rate", RANKX(
+			            Qrt_Agent,
+			            'revenue measures'[total_revenue_closed]
+			            , ,DESC,Dense
+			        )
+			    )
+			VAR TopQrtly_agent = 
+			    TOPN(
+			        1,
+			        FILTER(Qrt_Ranked, [Qrtly_rev_rate] = 1),
+			        'sales_teams'[sales_agent]
+			    )
+			RETURN
+			    CONCATENATEX(TopQrtly_agent, 'sales_teams'[sales_agent], ", ")
+			```
+		lineageTag: eca554db-aa33-4a82-8a1d-ff33feca6264
+
+	partition 'Agent Rankings' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

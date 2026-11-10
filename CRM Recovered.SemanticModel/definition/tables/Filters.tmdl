@@ -1,0 +1,451 @@
+table Filters
+	lineageTag: d6c95c7f-8342-4692-b0f4-58e862334771
+
+	measure 'tooltip cover bg' =
+			
+			IF([count active filters] = "0", "#ffffff","ffffff00")
+		lineageTag: 42c5d72e-b958-44a9-9e8c-18e0922ab322
+
+	measure _xxx_value = "xxx xxx xxx"
+		lineageTag: 33451d8e-7bc7-4b1e-88e6-d1b1b2e22978
+
+	measure 'Active slicer label' = ```
+			
+			VAR slicer_filtered = [slicer is_filtered]
+			
+			VAR slicer_label =
+			SWITCH(
+			        SELECTEDVALUE('Slicer Table'[Slicer]),
+			        "Account_tier", [List of account_tier values],
+			        "Month", [List of Month values],
+			        "Quarter", [List of Quarter values],
+			        "Sector", [List of sector values],
+			        "Location", [List of office_location values],
+			        "Manager", [List of manager values],
+			        "Sales_Agent", [List of sales_agent values],
+			        "Series", [List of series values]
+			)
+			
+			VAR show_slicer_label = 
+			IF([slicer is_filtered] = 1, slicer_label)
+			
+			RETURN
+			show_slicer_label
+			```
+		lineageTag: 0a15a4c9-2e58-4503-84bb-1e697800f8ca
+
+	measure 'List of account_tier values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('accounts'[account_tier])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('accounts'[account_tier]),
+								'accounts'[account_tier],
+								ASC
+							),
+							'accounts'[account_tier],
+							", ",
+							'accounts'[account_tier],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('accounts'[account_tier]),
+						'accounts'[account_tier],
+						", ",
+						'accounts'[account_tier],
+						ASC
+					)
+				)
+		lineageTag: 9bba4505-0713-47a5-8184-3e3b997f3818
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'List of manager values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('sales_teams'[manager])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('sales_teams'[manager]),
+								'sales_teams'[manager],
+								ASC
+							),
+							'sales_teams'[manager],
+							", ",
+							'sales_teams'[manager],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('sales_teams'[manager]),
+						'sales_teams'[manager],
+						", ",
+						'sales_teams'[manager],
+						ASC
+					)
+				)
+		lineageTag: 2ed7193e-ea77-4d3c-a6a3-f49950a24943
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'List of Month values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('DateTable'[Date].[Month])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('DateTable'[Date].[Month]),
+								'DateTable'[Date].[Month],
+								ASC
+							),
+							'DateTable'[Date].[Month],
+							", ",
+							'DateTable'[Date].[Month],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('DateTable'[Date].[Month]),
+						'DateTable'[Date].[Month],
+						", ",
+						'DateTable'[Date].[Month],
+						ASC
+					)
+				)
+		lineageTag: a8e9f225-ec1f-43ef-bfa4-5dc2d8caa46a
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'List of sales_agent values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('sales_pipeline'[sales_agent])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('sales_pipeline'[sales_agent]),
+								'sales_pipeline'[sales_agent],
+								ASC
+							),
+							'sales_pipeline'[sales_agent],
+							", ",
+							'sales_pipeline'[sales_agent],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('sales_pipeline'[sales_agent]),
+						'sales_pipeline'[sales_agent],
+						", ",
+						'sales_pipeline'[sales_agent],
+						ASC
+					)
+				)
+		lineageTag: bc261c66-ecd5-4624-ab42-6d1a36096e30
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'List of sector values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('accounts'[sector])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('accounts'[sector]),
+								'accounts'[sector],
+								ASC
+							),
+							'accounts'[sector],
+							", ",
+							'accounts'[sector],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('accounts'[sector]),
+						'accounts'[sector],
+						", ",
+						'accounts'[sector],
+						ASC
+					)
+				)
+		lineageTag: ed168f34-e555-481f-8416-bbe62bc16157
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'List of series values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('products'[series])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('products'[series]),
+								'products'[series],
+								ASC
+							),
+							'products'[series],
+							", ",
+							'products'[series],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('products'[series]),
+						'products'[series],
+						", ",
+						'products'[series],
+						ASC
+					)
+				)
+		lineageTag: 86b27933-3935-48d6-8429-9cb0b106530a
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'slicer is_filtered' =
+			
+			SWITCH(
+			    TRUE,
+			        ISFILTERED(accounts[account_tier])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Account_tier",1,
+			        ISFILTERED(DateTable[Date].[Month])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Month",1,
+			        ISFILTERED(DateTable[Date].[Quarter])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Quarter",1,
+			        ISFILTERED(accounts[sector])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Sector",1,
+			        ISFILTERED(accounts[office_location])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Location",1,
+			        ISFILTERED(sales_teams[manager])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Manager",1,
+			        ISFILTERED(sales_pipeline[sales_agent])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Sales_Agent",1,
+			        ISFILTERED(products[series])
+			        && SELECTEDVALUE('Slicer Table'[Slicer])= "Series",1
+			)
+		formatString: 0
+		lineageTag: baa7b30f-6b9f-4328-9b79-00b5f67051f3
+
+	measure 'tooltip cover text' =
+			
+			IF([count active filters] = "0", "No Active Filters")
+		lineageTag: c238719c-32fc-438d-86ea-036536ffc4c8
+
+	measure transparent = "#ffffff00"
+		lineageTag: 80da4ff1-b6ca-4041-bed5-78bde20d7cfa
+
+	measure 'CF filter button' =
+			
+			IF([count active filters] = "0", "#1a2947", "#cccfd6")
+		lineageTag: 862c8524-c2f5-4397-badd-c2991cc53ecc
+
+	measure 'CF filter count' =
+			
+			IF([count active filters] = "0", "#1a2947", "#cccfd6") // If count active is zero remeber we used text to retun our active filter count, so we have to use text as well for the condition, if true return blue #558ac9 30 means make it 70% transparent, else grey
+		lineageTag: 279e9174-2798-4113-baf6-cab2d67e1956
+
+	measure 'active filter tooltip' = ```
+			
+			VAR month_ = IF(ISFILTERED(DateTable[Date].[Month]), "Month", BLANK())
+			VAR quarter_ = IF(ISFILTERED(DateTable[Date].[Quarter]), "Quarter", BLANK())
+			VAR manager = IF(ISFILTERED(sales_teams[manager]), "Manager", BLANK())
+			VAR account_tier = IF(ISFILTERED(accounts[account_tier]), "Account Tier", BLANK())
+			VAR Sector = IF(ISFILTERED(accounts[sector]), "Sector", BLANK())
+			VAR series = IF(ISFILTERED(products[series]), "Product series", BLANK())
+			VAR Agent = IF(ISFILTERED(sales_pipeline[sales_agent]), "Agent", BLANK())
+			VAR Location = IF(ISFILTERED(accounts[office_location]), "Location", BLANK())
+			// we would have to concat the var but concat reqiures a table which we will have to create using list{}
+			
+			VAR filter_list = 
+			{month_, manager, account_tier, Sector, series, Agent}
+			
+			//because of the blank() our result will have alot of commas so we have to create a filter var to filter all the blank()
+			
+			VAR filter_table_ = FILTER(filter_list,[Value]<>BLANK())
+			
+			VAR filter_label_show =
+			CONCATENATEX(filter_table_, [Value], ", ")
+			
+			RETURN "Active Filters:" & IF(filter_label_show<>BLANK(),filter_label_show, "None")
+			```
+		lineageTag: 72c30cc6-997a-4d21-958d-e8086c915380
+
+	measure 'count active filters' =
+			
+			VAR account_tier = IF(ISFILTERED(accounts[account_tier]),1,0)
+			VAR month_ = IF(ISFILTERED(DateTable[Date].[Month]),1,0)
+			VAR quarter_ = IF(ISFILTERED(DateTable[Date].[Quarter]),1,0)
+			VAR sector = IF(ISFILTERED(accounts[sector]),1,0)
+			VAR location = IF(ISFILTERED(accounts[office_location]),1,0)
+			VAR agent = IF(ISFILTERED(sales_pipeline[sales_agent]),1,0)
+			VAR manager = IF(ISFILTERED(sales_teams[manager]),1,0)
+			VAR Product_series = IF(ISFILTERED(products[series]),1,0)
+			
+			VAR filter_count = account_tier + month_ + quarter_+ sector + location + agent + manager + Product_series
+			RETURN filter_count & ""
+		lineageTag: a5ed715f-ac39-4ee0-954f-302308d8dde5
+
+	measure 'List of Quarter values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('DateTable'[Date].[Quarter])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('DateTable'[Date].[Quarter]),
+								'DateTable'[Date].[Quarter],
+								ASC
+							),
+							'DateTable'[Date].[Quarter],
+							", ",
+							'DateTable'[Date].[Quarter],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('DateTable'[Date].[Quarter]),
+						'DateTable'[Date].[Quarter],
+						", ",
+						'DateTable'[Date].[Quarter],
+						ASC
+					)
+				)
+		lineageTag: 348b990a-9a36-45bc-9e7b-e565b8aafe0a
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	measure 'List of office_location values' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('accounts'[office_location])
+			VAR __MAX_VALUES_TO_SHOW = 2
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('accounts'[office_location]),
+								'accounts'[office_location],
+								ASC
+							),
+							'accounts'[office_location],
+							", ",
+							'accounts'[office_location],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('accounts'[office_location]),
+						'accounts'[office_location],
+						", ",
+						'accounts'[office_location],
+						ASC
+					)
+				)
+		lineageTag: 4fee6665-ab75-4fdd-9138-ebda8a9c1451
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	partition Filters = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

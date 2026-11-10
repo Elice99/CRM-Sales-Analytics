@@ -1,0 +1,42 @@
+table products
+	lineageTag: 4ef607f9-91aa-44c2-9f5a-8dc81d97cb89
+
+	column product
+		dataType: string
+		lineageTag: 70ceef95-8fa4-46a7-b97e-cad577d62d1d
+		summarizeBy: none
+		sourceColumn: product
+
+		annotation SummarizationSetBy = Automatic
+
+	column series
+		dataType: string
+		lineageTag: 01d1c258-14e0-4a16-8854-d12ea7cf19b8
+		summarizeBy: none
+		sourceColumn: series
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_price
+		dataType: int64
+		formatString: 0
+		lineageTag: 6da22601-0184-48dc-b284-645f31703924
+		summarizeBy: none
+		sourceColumn: sales_price
+
+		annotation SummarizationSetBy = Automatic
+
+	partition products = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ELICE99\SQLEXPRESS"),
+				    CRM_Sales_Opportunity = Source{[Name="CRM_Sales_Opportunity"]}[Data],
+				    dbo_products = CRM_Sales_Opportunity{[Schema="dbo",Item="products"]}[Data]
+				in
+				    dbo_products
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

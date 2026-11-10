@@ -1,0 +1,782 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "eea7f63a40740533b69f",
+  "position": {
+    "x": 0.53808355329061108,
+    "y": 149.3038515680127,
+    "z": 1000,
+    "height": 486.08201735222519,
+    "width": 1219.5193808126833,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Agent Rankings"
+                    }
+                  },
+                  "Property": "Current_Rank_success_rate"
+                }
+              },
+              "queryRef": "Agent Rankings.Current_Rank_success_rate",
+              "nativeQueryRef": "RANKS",
+              "displayName": "RANKS"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "sales_pipeline"
+                    }
+                  },
+                  "Property": "sales_agent"
+                }
+              },
+              "queryRef": "sales_pipeline.sales_agent",
+              "nativeQueryRef": "AGENT",
+              "displayName": "AGENT"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "opp_count"
+                }
+              },
+              "queryRef": "Measures (2).opp_count",
+              "nativeQueryRef": "TOTAL_DL",
+              "displayName": "TOTAL_DL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "deals measures"
+                    }
+                  },
+                  "Property": "deal_won"
+                }
+              },
+              "queryRef": "deals measures.deal_won",
+              "nativeQueryRef": "DEAL_WON",
+              "displayName": "DEAL_WON"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "deals measures"
+                    }
+                  },
+                  "Property": "deal_lost"
+                }
+              },
+              "queryRef": "deals measures.deal_lost",
+              "nativeQueryRef": "DEAL_LOST",
+              "displayName": "DEAL_LOST"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "deals measures"
+                    }
+                  },
+                  "Property": "Engaging_count"
+                }
+              },
+              "queryRef": "deals measures.Engaging_count",
+              "nativeQueryRef": "ACTIVE_DL",
+              "displayName": "ACTIVE_DL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "deals measures"
+                    }
+                  },
+                  "Property": "avg_deal_size"
+                }
+              },
+              "queryRef": "deals measures.avg_deal_size",
+              "nativeQueryRef": "AVG_DL_SIZE",
+              "displayName": "AVG_DL_SIZE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "deals measures"
+                    }
+                  },
+                  "Property": "deal_size won Last Month %"
+                }
+              },
+              "queryRef": "deals measures.deal_size won Last Month %",
+              "nativeQueryRef": "∆% DL_SIZE",
+              "displayName": "∆% DL_SIZE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "deals measures"
+                    }
+                  },
+                  "Property": "avg_deal_time"
+                }
+              },
+              "queryRef": "deals measures.avg_deal_time",
+              "nativeQueryRef": "AVG_DL_TIME",
+              "displayName": "AVG_DL_TIME"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "conversion_rates"
+                }
+              },
+              "queryRef": "Measures (2).conversion_rates",
+              "nativeQueryRef": "CONV_RATE",
+              "displayName": "CONV_RATE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "success_rate"
+                }
+              },
+              "queryRef": "Measures (2).success_rate",
+              "nativeQueryRef": "SUCC_RATE",
+              "displayName": "SUCC_RATE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures (2)"
+                    }
+                  },
+                  "Property": "success Last Month  %"
+                }
+              },
+              "queryRef": "Measures (2).success Last Month  %",
+              "nativeQueryRef": "∆% RATE",
+              "displayName": "∆% RATE"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "revenue measures"
+                    }
+                  },
+                  "Property": "total_revenue_closed"
+                }
+              },
+              "queryRef": "revenue measures.total_revenue_closed",
+              "nativeQueryRef": "TOTAL",
+              "displayName": "TOTAL"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "revenue measures"
+                    }
+                  },
+                  "Property": "vs Last Month %"
+                }
+              },
+              "queryRef": "revenue measures.vs Last Month %",
+              "nativeQueryRef": "∆%TOTAL",
+              "displayName": "∆%TOTAL"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Agent Rankings"
+                  }
+                },
+                "Property": "Current_Rank_success_rate"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E7E7E7'"
+                    }
+                  }
+                }
+              }
+            },
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "textSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Left'"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F7F7F7'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "deals measures"
+                        }
+                      },
+                      "Property": "CF Last Month deal size"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "deals measures"
+                        }
+                      },
+                      "Property": "TABLE_CF Last Month deal size"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "deals measures.deal_size won Last Month %"
+          }
+        },
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "CF success Last Month"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Measures (2)"
+                        }
+                      },
+                      "Property": "TABLE_CF success Last Month"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "Measures (2).success Last Month  %"
+          }
+        },
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "revenue measures"
+                        }
+                      },
+                      "Property": "CF Last Month"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "revenue measures"
+                        }
+                      },
+                      "Property": "TABLE_CF Last Month"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "revenue measures.vs Last Month %"
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "53.578967437901696D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Agent Rankings.Current_Rank_success_rate"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "130D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "sales_pipeline.sales_agent"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "89.19422398622501D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Measures (2).opp_count"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "83.1579353147527D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "deals measures.deal_won"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.1579369945426D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "deals measures.deal_lost"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "75.81842646739327D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "deals measures.Engaging_count"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.3915029580335D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "deals measures.deal_size won Last Month %"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.15793330332309D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "deals measures.avg_deal_size"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "95.15793568690549D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "deals measures.avg_deal_time"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "85.15793573228999D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Measures (2).conversion_rates"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.05238396141593D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Measures (2).success_rate"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.68457192420281D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Measures (2).success Last Month  %"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "74.02934602161343D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "revenue measures.total_revenue_closed"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.98792022976642D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "revenue measures.vs Last Month %"
+          }
+        }
+      ],
+      "columnFormatting": [
+        {
+          "properties": {
+            "styleHeader": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "styleTotal": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Agent Rankings.Current_Rank_success_rate"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Minimal'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Agent perf_Table'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "cb909f229e117bf90c5e"
+}
