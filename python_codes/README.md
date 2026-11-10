@@ -36,7 +36,7 @@ The **Sales Pipeline Prediction API** is an enterprise-grade machine learning so
 
 - **Real-time predictions** via REST API endpoints
 - **Batch processing** for multiple deals simultaneously
-- **High accuracy** with ROC-AUC score of 0.6482
+- **Honest evaluation** - ROC-AUC score of 0.5774 (leakage-free metrics)
 - **Production-ready** with error handling, logging, and health checks
 - **Interactive documentation** with Swagger UI
 
@@ -114,7 +114,7 @@ The **Sales Pipeline Prediction API** is an enterprise-grade machine learning so
 │  │ Trained on: 6,711 closed deals                       │   │
 │  │ Features: 50 (categorical + numerical)               │   │
 │  │ Classes: Binary (WON=1, LOST=0)                      │   │
-│  │ Performance: ROC-AUC 0.6482                          │   │
+│  │ Performance: ROC-AUC 0.5774                          │   │
 │  └──────────────────────────────────────────────────────┘   │
 └────────────────────┬────────────────────────────────────────┘
                      │
@@ -409,7 +409,7 @@ curl http://localhost:9696/metrics
 ```json
 {
   "model_type": "Pipeline",
-  "test_roc_auc": 0.6482,
+  "test_roc_auc": 0.5774,
   "total_features": 50,
   "categorical_features": 8,
   "numerical_features": 42,
@@ -579,52 +579,48 @@ Pipeline(
 - velocity_complexity_index
 
 ### Training Data
-- **Total Records**: 8,300 deals
-- **Training Set**: 6,711 deals (80%)
-- **Test Set**: 1,589 deals (20%)
+- **Total Records**: 8,300 deals (6,711 closed: won + lost, 1,589 active)
+- **Training Set**: 5,368 closed deals (80%)
+- **Test Set**: 1,343 closed deals (20%)
 - **Target Distribution**: 63.15% Won, 36.85% Lost
 - **Database**: SQL Server (CRM_Sales_Opportunity)
 
 ### Model Performance
 
+Metrics from the 2026-11-10 retrain, after fixing a data-leakage bug that
+previously inflated the scores (the test set used to be graded with statistics
+computed from its own targets).
+
 #### Test Set Metrics
 | Metric | Score |
 |--------|-------|
-| ROC-AUC | 0.6482 |
-| Accuracy | 0.5838 |
-| Precision | 0.7037 |
-| Recall | 0.6188 |
-| F1-Score | 0.6585 |
-
-#### Cross-Validation (5-Fold)
-| Metric | Score | Std Dev |
-|--------|-------|---------|
-| ROC-AUC | 0.5975 | 0.0119 |
-| Accuracy | 0.5833 | - |
-| F1-Score | 0.6546 | - |
+| ROC-AUC | 0.5774 |
+| Accuracy | 0.5964 |
+| Precision (WON class) | 0.6608 |
+| Recall (WON class) | 0.7761 |
+| F1-Score (WON class) | 0.7138 |
 
 #### Confusion Matrix (Test Set)
 ```
                 Predicted Won    Predicted Lost
-Actual Lost              245               227
-Actual Won              332               539
+Actual Lost              347               125
+Actual Won               195               676
 ```
 
 ### Feature Importance (Top 10)
-1. deal_age (9.2%)
-2. velocity_complexity_index (4.7%)
-3. days_into_year (4.3%)
-4. sales_velocity_ratio (4.1%)
-5. is_quarter_end (4.0%)
-6. pace_weighted_agent_score (3.8%)
-7. account_win_rate (3.7%)
-8. account (3.3%)
-9. agent_product_synergy (3.3%)
-10. month_engaged (3.0%)
+1. is_quarter_end (3.0%)
+2. deal_age (3.0%)
+3. account_win_rate (2.9%)
+4. sales_velocity_ratio (2.5%)
+5. days_into_year (2.5%)
+6. agent_product_synergy (2.5%)
+7. velocity_complexity_index (2.4%)
+8. office_load (2.3%)
+9. account (2.3%)
+10. office_deal_count (2.3%)
 
 ### Threshold Optimization
 - **Current Threshold**: 0.5
-- **Optimal Threshold**: 0.327 (for max F1-score)
 - **Confidence Score**: max(P(Won), P(Lost))
 
 ---
@@ -658,7 +654,7 @@ python test.py
   - Probability statistics (mean, min, max, std)
   - Confidence level breakdown
 
-### Test Results from Last Run
+### Test Results from Last Run (2026-11-10, retrained model)
 
 ```
 ================================================================================
@@ -667,20 +663,19 @@ PREDICTION SUMMARY - KEY RESULTS
 
 DEAL OUTCOME FORECAST
 Total Deals Analyzed:       1589 deals
-  ✓ Predicted to WIN:         68 deals (  4.3%)
-  ✗ Predicted to LOST:      1521 deals ( 95.7%)
+  ✓ Predicted to WIN:        888 deals ( 55.9%)
+  ✗ Predicted to LOST:       701 deals ( 44.1%)
 
 PROBABILITY STATISTICS
-Mean Win Probability:     0.4033
-Min Probability:          0.2980
-Max Probability:          0.7205
-Std Deviation:            0.0496
-Median Probability:       0.3919
+Mean Win Probability:     0.5477
+Min Probability:          0.1619
+Max Probability:          0.9658
+Std Deviation:            0.1667
 
 CONFIDENCE LEVELS
-High Confidence (≥0.7):        3 deals (  0.2%)
-Medium Confidence (0.6-0.7):  974 deals ( 61.3%)
-Low Confidence (<0.6):       612 deals ( 38.5%)
+High Confidence (≥0.7):      407 deals ( 25.6%)
+Medium Confidence (0.6-0.7): 461 deals ( 29.0%)
+Low Confidence (<0.6):       721 deals ( 45.4%)
 ```
 
 ### Unit Testing
@@ -865,10 +860,10 @@ logging.basicConfig(
 ## 📊 Performance Metrics
 
 ### Model Performance
-- **ROC-AUC Score**: 0.6482 (decent discriminator)
-- **Accuracy**: 66.6% (above 50% baseline)
-- **Precision**: 70.37% (when predicting WIN, correct 70% of time)
-- **Recall**: 61.88% (catches 62% of actual WONs)
+- **ROC-AUC Score**: 0.5774 (modest - slightly better than random)
+- **Accuracy**: 59.6% (majority-class baseline is 64.9% - the model's value is in its ranked win probabilities, not raw accuracy)
+- **Precision (WON)**: 66.1% (when predicting WIN, correct 66% of time)
+- **Recall (WON)**: 77.6% (catches 78% of actual WONs)
 
 ### API Performance
 - **Response Time**: ~50-100ms per prediction

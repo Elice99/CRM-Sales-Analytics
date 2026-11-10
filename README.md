@@ -50,7 +50,7 @@ pipenv run python test.py     # batch-scores active deals, exports results
 ## Model at a glance
 
 - XGBoost classifier over 50 engineered features (agent/account/product win rates, deal age, velocity and interaction features)
-- Test ROC-AUC 0.6482 on historical data — the next retrain will report a slightly lower, *honest* score after the data-leakage fix in `models.py`
+- Honest test scores (2026-11-10 retrain after a data-leakage fix): **ROC-AUC 0.5774, accuracy 59.6%** — the earlier 0.6482 was inflated because test-set statistics were built from the test set's own targets
 
 ## Repo hygiene
 
