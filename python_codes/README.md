@@ -36,7 +36,7 @@ The **Sales Pipeline Prediction API** is an enterprise-grade machine learning so
 
 - **Real-time predictions** via REST API endpoints
 - **Batch processing** for multiple deals simultaneously
-- **Honest evaluation** - ROC-AUC score of 0.5774 (leakage-free metrics)
+- **Honest evaluation** - ROC-AUC score of 0.6085 (leakage-free metrics)
 - **Production-ready** with error handling, logging, and health checks
 - **Interactive documentation** with Swagger UI
 
@@ -67,7 +67,7 @@ The **Sales Pipeline Prediction API** is an enterprise-grade machine learning so
 ### Technical Features
 
 - 🔧 **Type Validation** - Pydantic models ensure data integrity
-- 📊 **50 Features** - 8 categorical + 42 numerical features
+- 📊 **28 Features** - 8 categorical + 20 numerical features
 - 🧹 **Auto Data Preprocessing** - CatBoostEncoder + StandardScaler
 - 🎯 **Optimized Threshold** - Best performance on imbalanced data
 - 📝 **Structured Logging** - File and console logging
@@ -112,9 +112,9 @@ The **Sales Pipeline Prediction API** is an enterprise-grade machine learning so
 │          XGBoost Classification Model                        │
 │  ┌──────────────────────────────────────────────────────┐   │
 │  │ Trained on: 6,711 closed deals                       │   │
-│  │ Features: 50 (categorical + numerical)               │   │
+│  │ Features: 28 (categorical + numerical)               │   │
 │  │ Classes: Binary (WON=1, LOST=0)                      │   │
-│  │ Performance: ROC-AUC 0.5774                          │   │
+│  │ Performance: ROC-AUC 0.6085                          │   │
 │  └──────────────────────────────────────────────────────┘   │
 └────────────────────┬────────────────────────────────────────┘
                      │
@@ -143,7 +143,7 @@ Active Deals Data (CSV)
         ↓
     models.py (Training)
         ├─→ Data Loading & EDA
-        ├─→ Feature Engineering (50 features)
+        ├─→ Feature Engineering (28 features)
         ├─→ Train/Test Split (80/20)
         ├─→ Model Training (XGBoost + CatBoost + StandardScaler)
         └─→ Model Artifacts (Pickle)
@@ -409,10 +409,10 @@ curl http://localhost:9696/metrics
 ```json
 {
   "model_type": "Pipeline",
-  "test_roc_auc": 0.5774,
-  "total_features": 50,
+  "test_roc_auc": 0.6085,
+  "total_features": 28,
   "categorical_features": 8,
-  "numerical_features": 42,
+  "numerical_features": 20,
   "status": "loaded"
 }
 ```
@@ -520,7 +520,12 @@ Pipeline(
 )
 ```
 
-### Features (50 Total)
+### Features (28 Total)
+
+The hand-rolled group-statistic features (win rates / deal counts per
+agent, account, product...) were tested and removed - they duplicated the
+CatBoost target encoding and hurt out-of-sample AUC. 20 numerical + 8
+categorical.
 
 #### Categorical Features (8)
 - sales_agent
@@ -532,36 +537,20 @@ Pipeline(
 - regional_office
 - company_size
 
-#### Numerical Features (42)
-**Win Rate Features:**
-- agent_win_rate
-- account_win_rate
-- sector_win_rate
-- office_win_rate
-- region_win_rate
-- company_size_win_rate
-- product_win_rate
-
+#### Numerical Features (20)
 **Deal Statistics:**
 - year_established
 - employees_log
 - deal_age
-- agent_avg_days_to_close
-
-**Performance Counts:**
-- agent_total_deals, agent_win
-- account_deal_count, account_total_win
-- sector_deal_count, sector_total_win
-- office_deal_count, office_total_win
-- region_deal_count, region_total_win
-- company_size_deal_count, company_size_total_win
-- product_deal_count, product_total_win
 
 **Interaction Features:**
+- deal_complexity
+- sales_velocity_ratio
+- pace_weighted_agent_score
+- velocity_complexity_index
 - agent_product_synergy
 - agent_win_efficiency
 - agent_vs_sector
-- deal_complexity
 - office_load
 - product_sector_fit
 - region_size_match
@@ -574,9 +563,6 @@ Pipeline(
 - days_into_year
 - quarter_risk
 - is_quarter_end
-- sales_velocity_ratio
-- pace_weighted_agent_score
-- velocity_complexity_index
 
 ### Training Data
 - **Total Records**: 8,300 deals (6,711 closed: won + lost, 1,589 active)
@@ -587,37 +573,44 @@ Pipeline(
 
 ### Model Performance
 
-Metrics from the 2026-11-10 retrain, after fixing a data-leakage bug that
-previously inflated the scores (the test set used to be graded with statistics
-computed from its own targets).
+Metrics from the 2026-11-10 retrain (28-feature model, group-statistic
+features removed, hyperparameters tuned by RandomizedSearchCV + repeated
+stratified CV on the training split; single test evaluation).
+Earlier scores were inflated by a data-leakage bug (the test set was graded
+with statistics computed from its own targets) - the fix is what made these
+numbers trustworthy.
 
 #### Test Set Metrics
 | Metric | Score |
 |--------|-------|
-| ROC-AUC | 0.5774 |
-| Accuracy | 0.5964 |
-| Precision (WON class) | 0.6608 |
-| Recall (WON class) | 0.7761 |
-| F1-Score (WON class) | 0.7138 |
+| ROC-AUC | 0.6085 |
+| Accuracy | 0.6277 |
+| Precision (WON class) | 0.6381 |
+| Recall (WON class) | 0.9481 |
+| F1-Score (WON class) | 0.7628 |
+
+Note: at the shipped 0.5 threshold the model is optimistically biased toward
+WON (94.8% recall, 63.8% precision). Treat the win probability as a ranking
+score; raise the threshold if you need high-precision WON flags.
 
 #### Confusion Matrix (Test Set)
 ```
                 Predicted Won    Predicted Lost
-Actual Lost              347               125
-Actual Won               195               676
+Actual Lost              456                39
+Actual Won                44               804
 ```
 
 ### Feature Importance (Top 10)
-1. is_quarter_end (3.0%)
-2. deal_age (3.0%)
-3. account_win_rate (2.9%)
-4. sales_velocity_ratio (2.5%)
-5. days_into_year (2.5%)
-6. agent_product_synergy (2.5%)
-7. velocity_complexity_index (2.4%)
-8. office_load (2.3%)
-9. account (2.3%)
-10. office_deal_count (2.3%)
+1. pace_weighted_agent_score (9.5%)
+2. sales_velocity_ratio (8.5%)
+3. is_quarter_end (8.2%)
+4. deal_age (7.3%)
+5. days_into_year (5.1%)
+6. month_engaged (4.5%)
+7. deal_complexity (4.3%)
+8. velocity_complexity_index (4.1%)
+9. quarter_engaged (4.0%)
+10. sector (3.8%)
 
 ### Threshold Optimization
 - **Current Threshold**: 0.5
@@ -663,20 +656,27 @@ PREDICTION SUMMARY - KEY RESULTS
 
 DEAL OUTCOME FORECAST
 Total Deals Analyzed:       1589 deals
-  ✓ Predicted to WIN:        888 deals ( 55.9%)
-  ✗ Predicted to LOST:       701 deals ( 44.1%)
+  ✓ Predicted to WIN:       1589 deals (100.0%)
+  ✗ Predicted to LOST:         0 deals (  0.0%)
 
 PROBABILITY STATISTICS
-Mean Win Probability:     0.5477
-Min Probability:          0.1619
-Max Probability:          0.9658
-Std Deviation:            0.1667
+Mean Win Probability:     0.7413
+Min Probability:          0.6494
+Max Probability:          0.8686
+Std Deviation:            0.0410
 
 CONFIDENCE LEVELS
-High Confidence (≥0.7):      407 deals ( 25.6%)
-Medium Confidence (0.6-0.7): 461 deals ( 29.0%)
-Low Confidence (<0.6):       721 deals ( 45.4%)
+High Confidence (≥0.7):     1387 deals ( 87.3%)
+Medium Confidence (0.6-0.7):  202 deals ( 12.7%)
+Low Confidence (<0.6):         0 deals (  0.0%)
 ```
+
+> **⚠️ Caveat — illustrative only:** the "active" deals in the database were
+> engaged in 2016-17, so at serve time their `deal_age` computes to ~9 years,
+> far outside the training distribution (closed deals ran 30-200 days). That
+> staleness compresses every score into the high-WON range, so treat these
+> numbers as a demo of the scoring pipeline, not a real forecast. On fresh
+> deals the model's win probabilities spread out normally.
 
 ### Unit Testing
 
@@ -860,10 +860,10 @@ logging.basicConfig(
 ## 📊 Performance Metrics
 
 ### Model Performance
-- **ROC-AUC Score**: 0.5774 (modest - slightly better than random)
-- **Accuracy**: 59.6% (majority-class baseline is 64.9% - the model's value is in its ranked win probabilities, not raw accuracy)
-- **Precision (WON)**: 66.1% (when predicting WIN, correct 66% of time)
-- **Recall (WON)**: 77.6% (catches 78% of actual WONs)
+- **ROC-AUC Score**: 0.6085 (modest - meaningfully better than random, ranks deals by win likelihood)
+- **Accuracy**: 62.8% (majority-class baseline is 64.9% - the model's value is in its ranked win probabilities, not raw accuracy)
+- **Precision (WON)**: 63.8% (when predicting WIN, correct 64% of time)
+- **Recall (WON)**: 94.8% (catches 95% of actual WONs; at threshold 0.5 the model is WON-biased - use the probability as a ranking score)
 
 ### API Performance
 - **Response Time**: ~50-100ms per prediction

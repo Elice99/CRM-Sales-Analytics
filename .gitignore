@@ -22,3 +22,8 @@ test_summary_statistics.txt
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Local run logs & experiment output
+train_run.log
+tune_output.txt
+api_logs.txt

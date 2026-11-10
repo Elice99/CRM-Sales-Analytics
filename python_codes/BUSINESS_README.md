@@ -23,7 +23,7 @@ SPOTA operates across multiple global regions serving diverse sectors—retail, 
 A production-grade machine learning system that transforms sales operations from **reactive to proactive** through real-time deal outcome prediction and risk assessment.
 
 ### What It Does
-The API analyzes active pipeline deals and predicts their probability of being won or lost with **scored win probabilities** (validated at 59.6% accuracy on held-out data), enabling sales leadership to:
+The API analyzes active pipeline deals and predicts their probability of being won or lost with **scored win probabilities** (validated at 62.8% accuracy, ROC-AUC 0.6085, on held-out data), enabling sales leadership to:
 
 1. **Prioritize High-Risk Deals:** Identify deals at risk of loss before they fail, allowing proactive intervention
 2. **Forecast Revenue with Confidence:** Aggregate predictions across the pipeline to forecast quarter-end revenue
@@ -37,11 +37,11 @@ The API analyzes active pipeline deals and predicts their probability of being w
 ### Model Performance
 | Metric | Value | Interpretation |
 |--------|-------|-----------------|
-| **Prediction Accuracy** | 59.6% | About 6 out of 10 predictions correct |
-| **ROC-AUC Score** | 0.5774 | Ranks deals by win likelihood (modest signal) |
-| **Precision (Won Deals)** | 66.1% | When model predicts WIN, it's correct 66% of the time |
-| **Recall (Won Deals)** | 77.6% | Captures 78% of actual winning deals |
-| **Confidence Score Range** | 16.2% – 96.6% | Clear risk stratification across pipeline |
+| **Prediction Accuracy** | 62.8% | About 6 out of 10 predictions correct |
+| **ROC-AUC Score** | 0.6085 | Ranks deals by win likelihood (modest but honest signal) |
+| **Precision (Won Deals)** | 63.8% | When model predicts WIN, it's correct 64% of the time |
+| **Recall (Won Deals)** | 94.8% | Captures 95% of actual winning deals |
+| **Confidence Score Range** | 64.9% - 86.9% | Ranked win probabilities across the pipeline |
 
 ### Training Foundation
 - **Data Source:** 6,711 closed deals from CRM_Sales_Opportunity database
@@ -220,7 +220,7 @@ A: The API accepts filtering parameters. You can analyze by deal size, sector, a
 A: Yes. The API is REST-based and integrates with any system that can make HTTP requests. Integration typically takes 1-2 weeks.
 
 **Q: How do we know the predictions are reliable?**
-A: The model was validated on 1,343 held-out test deals with 59.6% accuracy (ROC-AUC 0.5774). We provide confidence scores for every prediction, and we recommend initially using the system to *inform* decisions (not replace human judgment) while building confidence.
+A: The model was validated on 1,343 held-out test deals with 62.8% accuracy (ROC-AUC 0.6085). We provide confidence scores for every prediction, and we recommend initially using the system to *inform* decisions (not replace human judgment) while building confidence.
 
 ---
 
